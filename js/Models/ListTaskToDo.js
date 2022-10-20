@@ -27,6 +27,5 @@ function ListTaskToDo(){
 
     this.xoaTask = function (index){
         this.arrTask.splice(index,1);
-        this.hienThiTask();
     }
 }

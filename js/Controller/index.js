@@ -3,6 +3,40 @@ var list_task = new ListTaskToDo();
 var listComplete = new ListTaskComplete();
 var index_ID = 0;
 
+function luuStorageListTask() {
+    localStorage.removeItem('list_task');
+    for(var i=0;i<list_task.arrTask.length;i++){
+        var stringList=JSON.stringify(list_task.arrTask);
+        localStorage.setItem("list_task",stringList);
+    }
+}
+function layStorageListTask() {
+    if(localStorage.getItem('list_task')){
+        var string = localStorage.getItem('list_task');
+        list_task.arrTask=JSON.parse(string);
+    }
+    list_task.hienThiTask();
+}
+
+
+function luuStorageTaskComplete() {
+    localStorage.removeItem('listComplete');
+    for(var i=0;i<listComplete.arrTask.length;i++){
+        var stringList=JSON.stringify(listComplete.arrTask);
+        localStorage.setItem("listComplete",stringList);
+    }
+}
+
+function layStorageTaskComplete() {
+    if(localStorage.getItem('listComplete')){
+        var string = localStorage.getItem('listComplete');
+        listComplete.arrTask=JSON.parse(string);
+    }
+    listComplete.hienThiTask();
+}
+
+
+
 function checkTask() {
     var checkFlag = true;
     var txt = document.getElementById('newTask').value;
@@ -13,6 +47,7 @@ function checkTask() {
     return true;
 }
 
+// Thêm task
 document.getElementById('addItem').onclick = function (){
     if(!checkTask()){
         return;
@@ -22,7 +57,8 @@ document.getElementById('addItem').onclick = function (){
     task.taskName = document.getElementById('newTask').value;
     list_task.arrTask.push(task);
     index_ID++;
-    list_task.hienThiTask();
+    luuStorageListTask();
+    layStorageListTask();
 }
 
 
@@ -36,7 +72,8 @@ function deleteToDo(event){
         }
     }
     list_task.xoaTask(index);
-
+    luuStorageListTask();
+    layStorageListTask();
 }
 
 // Thêm task Complete và xóa task ToDo
@@ -60,7 +97,10 @@ function completeToDo(event){
     listComplete.hienThiTask();
     // Xóa task todo
     list_task.xoaTask(index);
-
+    luuStorageListTask();
+    luuStorageTaskComplete();
+    layStorageListTask();
+    layStorageTaskComplete();
 }
 
 function deleteToDoComplete(event){
@@ -72,7 +112,8 @@ function deleteToDoComplete(event){
         }
     }
     listComplete.xoaTask(index);
-    
+    luuStorageTaskComplete();
+    layStorageTaskComplete();
 }
 
 function completeToDoComplete(event){
@@ -93,10 +134,19 @@ function completeToDoComplete(event){
 
     // Xóa task
     listComplete.xoaTask(index);
+    luuStorageListTask();
+    luuStorageTaskComplete();
+    layStorageListTask();
+    layStorageTaskComplete();
 }
 // Xóa check lỗi khi bắt đầu nhập lại
 
 document.getElementById('newTask').onkeydown = function (){
     document.getElementById('notiInput').style.display = 'none';
 }
+
+window.onload = (event) => {
+    layStorageListTask();
+    layStorageTaskComplete();
+};
 
